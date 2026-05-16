@@ -6,9 +6,9 @@ import { useRouter } from 'next/navigation'
 import { IoNotificationsOutline, IoMenuOutline, IoCloseOutline } from 'react-icons/io5'
 import { HiOutlineLogout } from 'react-icons/hi'
 import { FiGithub } from 'react-icons/fi'
+import ThemeToggle from '../ui/ThemeToggle'
 import Logo from './Logo'
 import useAuth from '../../hooks/useAuth'
-import { capitalize } from '../../utils/helpers'
 
 const Navbar = () => {
     const { user, role, coins, logout } = useAuth()
@@ -65,6 +65,7 @@ const Navbar = () => {
                     {!user ? (
                         // ── Not logged in ──────────────────────────────
                         <>
+                            <ThemeToggle />
                             <a
                                 href="https://github.com"
                                 target="_blank"
@@ -80,6 +81,7 @@ const Navbar = () => {
                     ) : (
                         // ── Logged in ──────────────────────────────────
                         <>
+                            <ThemeToggle />
                             {/* Coin pill */}
                             <div style={{
                                 background: '#7C3AED18',
