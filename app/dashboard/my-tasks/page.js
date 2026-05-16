@@ -1,3 +1,7 @@
-export default function Page() {
-  return <div style={{color:"#8892A4",padding:"24px"}}>Coming soon...</div>
+import MyTasks from '../../../components/dashboard/buyer/MyTasks'
+
+export const metadata = { title: 'My Tasks — TaskNova' }
+
+export default function MyTasksPage() {
+  return <MyTasks />
 }

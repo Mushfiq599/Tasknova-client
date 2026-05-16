@@ -1,3 +1,7 @@
-export default function Page() {
-  return <div style={{color:"#8892A4",padding:"24px"}}>Coming soon...</div>
+import PaymentHistory from '../../../components/dashboard/buyer/PaymentHistory'
+
+export const metadata = { title: 'Payment History — TaskNova' }
+
+export default function PaymentHistoryPage() {
+  return <PaymentHistory />
 }
