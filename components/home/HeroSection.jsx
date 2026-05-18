@@ -147,7 +147,7 @@ const HeroSection = () => {
                     {/* Subtitle */}
                     <p style={{
                         fontSize: '17px',
-                        color: isLight ? '#0C4A6E' : '#8892A4',
+                        color: isLight ? '#0284C7' : '#8892A4',
                         lineHeight: 1.7, maxWidth: '520px', marginBottom: '36px',
                     }}>
                         {slide.subtitle}
@@ -176,8 +176,8 @@ const HeroSection = () => {
                             { val: '$120K', label: 'Total Paid Out' },
                         ].map(({ val, label }) => (
                             <div key={label}>
-                                <p style={{ fontSize: '22px', fontWeight: 700, color: isLight ? '#0C1A2E' : '#E8EAF0' }}>{val}</p>
-                                <p style={{ fontSize: '12px', color: isLight ? '#0C4A6E' : '#4A5568', marginTop: '2px' }}>{label}</p>
+                                <p style={{ fontSize: '22px', fontWeight: 700, color: isLight ? '#0284C7' : '#E8EAF0' }}>{val}</p>
+                                <p style={{ fontSize: '12px', color: isLight ? '#0284C7' : '#4A5568', marginTop: '2px' }}>{label}</p>
                             </div>
                         ))}
                     </div>
