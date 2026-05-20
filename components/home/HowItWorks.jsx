@@ -10,6 +10,7 @@ const workerSteps = [
     { step: '03', title: 'Submit Your Work', desc: 'Complete the task and submit your proof for review.', icon: '📤' },
     { step: '04', title: 'Get Paid', desc: 'Once approved, coins are added. Withdraw anytime.', icon: '💸' },
 ]
+
 const buyerSteps = [
     { step: '01', title: 'Register as Buyer', desc: 'Sign up as a Buyer and receive 50 coins on registration.', icon: '🧑‍💼' },
     { step: '02', title: 'Purchase Coins', desc: 'Top up your wallet using Stripe to fund your tasks.', icon: '💳' },
@@ -17,19 +18,18 @@ const buyerSteps = [
     { step: '04', title: 'Review & Approve', desc: 'Check submissions and approve quality work to release pay.', icon: '✅' },
 ]
 
-const StepCard = ({ step, title, desc, icon, accent, isLight, index }) => (
-    <div className="reveal" style={{
-        display: 'flex', gap: '16px', alignItems: 'flex-start',
-        animationDelay: `${index * 0.1}s`,
-    }}>
-        <div style={{
-            width: '48px', height: '48px', flexShrink: 0,
-            background: `${accent}18`, border: `1px solid ${accent}44`,
-            borderRadius: '12px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '22px',
-            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-        }}
+const StepItem = ({ step, title, desc, icon, accent, isLight }) => (
+    <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+        <div
+            style={{
+                width: '48px', height: '48px', flexShrink: 0,
+                background: `${accent}18`, border: `1px solid ${accent}44`,
+                borderRadius: '12px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '22px',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                cursor: 'default',
+            }}
             onMouseEnter={e => {
                 e.currentTarget.style.transform = 'scale(1.15) rotate(-5deg)'
                 e.currentTarget.style.boxShadow = `0 6px 20px ${accent}33`
@@ -42,13 +42,26 @@ const StepCard = ({ step, title, desc, icon, accent, isLight, index }) => (
             {icon}
         </div>
         <div>
-            <div style={{ fontSize: '11px', color: accent, fontWeight: 600, letterSpacing: '0.1em', marginBottom: '4px' }}>
+            <div style={{
+                fontSize: '11px', color: accent, fontWeight: 600,
+                letterSpacing: '0.1em', marginBottom: '4px',
+            }}>
                 STEP {step}
             </div>
-            <h4 style={{ fontSize: '15px', fontWeight: 600, color: isLight ? '#0C1A2E' : '#E8EAF0', marginBottom: '6px' }}>
+            <h4 style={{
+                fontSize: '15px', fontWeight: 600,
+                color: isLight ? '#0C1A2E' : '#E8EAF0',
+                marginBottom: '6px',
+            }}>
                 {title}
             </h4>
-            <p style={{ fontSize: '13px', color: isLight ? '#0C4A6E' : '#8892A4', lineHeight: 1.6 }}>{desc}</p>
+            <p style={{
+                fontSize: '13px',
+                color: isLight ? '#0C4A6E' : '#8892A4',
+                lineHeight: 1.6,
+            }}>
+                {desc}
+            </p>
         </div>
     </div>
 )
@@ -65,15 +78,13 @@ const HowItWorks = () => {
     const borderBase = isLight ? '#38BDF8' : '#1B3358'
 
     useEffect(() => {
-        const observe = (el, dir) => {
+        const observe = (el) => {
             if (!el) return
             const observer = new IntersectionObserver(
                 ([entry]) => {
                     if (entry.isIntersecting) {
-                        el.classList.add('visible')
-                        el.querySelectorAll('.reveal').forEach((item, i) => {
-                            setTimeout(() => item.classList.add('visible'), i * 120)
-                        })
+                        el.style.opacity = '1'
+                        el.style.transform = 'translateX(0)'
                         observer.unobserve(el)
                     }
                 },
@@ -82,50 +93,104 @@ const HowItWorks = () => {
             observer.observe(el)
             return () => observer.disconnect()
         }
-        observe(leftRef.current)
-        observe(rightRef.current)
-    }, [])
 
-    const Panel = ({ ref: panelRef, steps, accent, label, dir }) => (
-        <div ref={panelRef} className={`reveal reveal-${dir}`} style={{
-            background: cardBg,
-            border: `1px solid ${accent}44`,
-            borderRadius: '12px', padding: '20px',
-        }}>
-            <div style={{
-                display: 'flex', alignItems: 'center', gap: '10px',
-                marginBottom: '28px', paddingBottom: '16px',
-                borderBottom: `1px solid ${borderBase}`,
-            }}>
-                <span style={{
-                    background: `${accent}18`, border: `1px solid ${accent}55`,
-                    color: accent, fontSize: '12px', fontWeight: 600,
-                    padding: '4px 12px', borderRadius: '20px',
-                }}>{label}</span>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                {steps.map((s, i) => (
-                    <StepCard key={s.step} {...s} accent={accent} isLight={isLight} index={i} />
-                ))}
-            </div>
-        </div>
-    )
+        const cleanLeft = observe(leftRef.current)
+        const cleanRight = observe(rightRef.current)
+        return () => {
+            cleanLeft?.()
+            cleanRight?.()
+        }
+    }, [])
 
     return (
         <section id="how-it-works" className="section" style={{ background: 'transparent' }}>
             <div className="container">
                 <SectionHeading
-                    label="How It Works" title="Simple Steps to" highlight="Start Earning"
+                    label="How It Works"
+                    title="Simple Steps to"
+                    highlight="Start Earning"
                     subtitle="Whether you want to complete tasks or post them, TaskNova makes it easy to get started in minutes."
                     center
                 />
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }} className="hiw-grid">
-                    <Panel ref={leftRef} steps={workerSteps} accent={workerAccent} label="For Workers" dir="left" />
-                    <Panel ref={rightRef} steps={buyerSteps} accent={buyerAccent} label="For Buyers" dir="right" />
+
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                    gap: '24px',
+                }} className="hiw-grid">
+
+                    {/* Workers panel */}
+                    <div
+                        ref={leftRef}
+                        style={{
+                            background: cardBg,
+                            border: `1px solid ${workerAccent}44`,
+                            borderRadius: '12px', padding: '20px',
+                            opacity: 0,
+                            transform: 'translateX(-32px)',
+                            transition: 'opacity 0.6s cubic-bezier(0.4,0,0.2,1), transform 0.6s cubic-bezier(0.4,0,0.2,1)',
+                        }}
+                    >
+                        <div style={{
+                            display: 'flex', alignItems: 'center', gap: '10px',
+                            marginBottom: '28px', paddingBottom: '16px',
+                            borderBottom: `1px solid ${borderBase}`,
+                        }}>
+                            <span style={{
+                                background: `${workerAccent}18`,
+                                border: `1px solid ${workerAccent}55`,
+                                color: workerAccent, fontSize: '12px', fontWeight: 600,
+                                padding: '4px 12px', borderRadius: '20px',
+                            }}>
+                                For Workers
+                            </span>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                            {workerSteps.map((s) => (
+                                <StepItem key={s.step} {...s} accent={workerAccent} isLight={isLight} />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Buyers panel */}
+                    <div
+                        ref={rightRef}
+                        style={{
+                            background: cardBg,
+                            border: `1px solid ${buyerAccent}44`,
+                            borderRadius: '12px', padding: '20px',
+                            opacity: 0,
+                            transform: 'translateX(32px)',
+                            transition: 'opacity 0.6s cubic-bezier(0.4,0,0.2,1) 0.1s, transform 0.6s cubic-bezier(0.4,0,0.2,1) 0.1s',
+                        }}
+                    >
+                        <div style={{
+                            display: 'flex', alignItems: 'center', gap: '10px',
+                            marginBottom: '28px', paddingBottom: '16px',
+                            borderBottom: `1px solid ${borderBase}`,
+                        }}>
+                            <span style={{
+                                background: `${buyerAccent}18`,
+                                border: `1px solid ${buyerAccent}55`,
+                                color: buyerAccent, fontSize: '12px', fontWeight: 600,
+                                padding: '4px 12px', borderRadius: '20px',
+                            }}>
+                                For Buyers
+                            </span>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                            {buyerSteps.map((s) => (
+                                <StepItem key={s.step} {...s} accent={buyerAccent} isLight={isLight} />
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
+
             <style>{`
-        @media (max-width: 768px) { .hiw-grid { grid-template-columns: 1fr !important; } }
+        @media (max-width: 768px) {
+          .hiw-grid { grid-template-columns: 1fr !important; }
+        }
       `}</style>
         </section>
     )
