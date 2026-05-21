@@ -733,3 +733,206 @@ footer,
 [data-theme="light"] footer a:hover {
   color: #00D4FF !important;
 }
+/* ─────────────────────────────────────────────────────────────
+   PASTE THIS ENTIRE BLOCK at the very bottom of globals.css
+   (after the existing [data-theme="light"] footer rules)
+   ───────────────────────────────────────────────────────────── */
+
+/* ─── Dashboard Light Mode — sky-blue surface theme ────────── */
+
+/* Dashboard main background */
+[data-theme="light"] .dashboard-main {
+  background: #E0F2FE !important;
+}
+
+/* Dashboard cards — sky-blue tinted surface */
+[data-theme="light"] .card,
+[data-theme="light"] .card-hover {
+  background: #F0F9FF !important;
+  border: 1px solid #7DD3FC !important;
+  box-shadow: 0 2px 12px #0EA5E918 !important;
+}
+
+[data-theme="light"] .card-hover:hover {
+  border-color: #0284C7 !important;
+  box-shadow: 0 6px 24px #0EA5E930 !important;
+}
+
+/* StatCard (inline-styled) — force light overrides via globals */
+[data-theme="light"] [data-stat-card] {
+  background: #DBEAFE !important;
+  border-color: #93C5FD !important;
+}
+
+/* Dashboard main <main> padding area */
+[data-theme="light"] main {
+  background: transparent !important;
+}
+
+/* Table wrapper inside dashboard */
+[data-theme="light"] .table-wrapper {
+  background: #F0F9FF;
+  border: 1px solid #7DD3FC;
+  border-radius: 12px;
+}
+
+/* Notification panel */
+[data-theme="light"] .notif-panel {
+  background: #F0F9FF !important;
+  border-color: #38BDF8 !important;
+  box-shadow: 0 8px 32px #0284C722 !important;
+}
+
+[data-theme="light"] .notif-item {
+  border-bottom-color: #BAE6FD !important;
+}
+
+[data-theme="light"] .notif-item:hover {
+  background: #E0F2FE !important;
+}
+
+/* Sidebar scrollbar in light mode */
+[data-theme="light"] .dashboard-sidebar::-webkit-scrollbar-track {
+  background: #BAE6FD;
+}
+[data-theme="light"] .dashboard-sidebar::-webkit-scrollbar-thumb {
+  background: #38BDF8;
+}
+
+/* Modal overlay */
+[data-theme="light"] .modal-backdrop {
+  background: rgba(12, 26, 46, 0.5) !important;
+}
+
+[data-theme="light"] .modal-content {
+  background: #F0F9FF !important;
+  border-color: #38BDF8 !important;
+}
+
+/* Badge overrides for light dashboard */
+[data-theme="light"] .badge-approved {
+  background: #D1FAE518;
+  border-color: #10B98155;
+  color: #059669;
+}
+
+[data-theme="light"] .badge-pending {
+  background: #FEF3C718;
+  border-color: #F59E0B55;
+  color: #D97706;
+}
+
+[data-theme="light"] .badge-rejected {
+  background: #FEE2E218;
+  border-color: #EF444455;
+  color: #DC2626;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PASTE THIS ENTIRE BLOCK at the very bottom of globals.css
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Dashboard light mode background ─────────────────────────── */
+[data-theme="light"] .dashboard-main { background: #E0F2FE !important; }
+
+/* ── Dashboard cards — sky-blue tinted ───────────────────────── */
+[data-theme="light"] .card,
+[data-theme="light"] .card-hover {
+  background: #F0F9FF !important;
+  border: 1px solid #7DD3FC !important;
+  box-shadow: 0 2px 12px rgba(14,165,233,0.10) !important;
+}
+[data-theme="light"] .card-hover:hover {
+  border-color: #0284C7 !important;
+  box-shadow: 0 6px 24px rgba(14,165,233,0.20) !important;
+}
+
+/* ── Table in light mode ──────────────────────────────────────── */
+[data-theme="light"] .table-wrapper {
+  background: #F0F9FF;
+  border: 1px solid #7DD3FC;
+  border-radius: 12px;
+  overflow: hidden;
+}
+[data-theme="light"] .table thead th {
+  color: #075985 !important;
+  border-bottom-color: #7DD3FC !important;
+  background: #E0F2FE;
+}
+[data-theme="light"] .table tbody tr { border-bottom-color: #BAE6FD !important; }
+[data-theme="light"] .table tbody tr:hover { background: #E0F2FE !important; }
+[data-theme="light"] .table tbody td { color: #0C4A6E !important; }
+
+/* ── Sidebar scrollbar ────────────────────────────────────────── */
+[data-theme="light"] .dashboard-sidebar::-webkit-scrollbar-track { background: #BAE6FD; }
+[data-theme="light"] .dashboard-sidebar::-webkit-scrollbar-thumb { background: #38BDF8; }
+
+/* ── Notification panel ───────────────────────────────────────── */
+[data-theme="light"] .notif-panel {
+  background: #F0F9FF !important;
+  border-color: #38BDF8 !important;
+  box-shadow: 0 8px 32px rgba(2,132,199,0.15) !important;
+}
+[data-theme="light"] .notif-item { border-bottom-color: #BAE6FD !important; }
+[data-theme="light"] .notif-item:hover { background: #E0F2FE !important; }
+
+/* ── Modal in light ───────────────────────────────────────────── */
+[data-theme="light"] .modal-content {
+  background: #F0F9FF !important;
+  border-color: #38BDF8 !important;
+}
+
+/* ── Badge tweaks for light dashboard ────────────────────────── */
+[data-theme="light"] .badge-approved { background:#D1FAE518; border-color:#10B98155; color:#059669; }
+[data-theme="light"] .badge-pending  { background:#FEF3C718; border-color:#F59E0B55; color:#D97706; }
+[data-theme="light"] .badge-rejected { background:#FEE2E218; border-color:#EF444455; color:#DC2626; }
+
+/* ── Heading / paragraph colors inside dashboard in light mode ─ */
+[data-theme="light"] .card h1,
+[data-theme="light"] .card h2,
+[data-theme="light"] .card h3 { color: #0C1A2E !important; }
+[data-theme="light"] .card p   { color: #0C4A6E !important; }
+
+/* ════════════════════════════════════════════════════════════════
+   CARD ANIMATIONS
+   ════════════════════════════════════════════════════════════════ */
+
+/* Entrance — triggered via JS IntersectionObserver on each card */
+@keyframes cardFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Generic utility class you can add to any card */
+.card-animated-entry {
+  animation: cardFadeUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Hover lift — add this class to any .card for the lift effect */
+.card-lift {
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1),
+              box-shadow 0.25s ease,
+              border-color 0.25s ease !important;
+}
+.card-lift:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.18) !important;
+}
+[data-theme="light"] .card-lift:hover {
+  box-shadow: 0 16px 40px rgba(2,132,199,0.14) !important;
+  border-color: #0284C7 !important;
+}
+
+/* Pulse on stat value number when it first renders */
+@keyframes valuePopIn {
+  0%   { transform: scale(0.7); opacity: 0; }
+  70%  { transform: scale(1.08); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+.stat-value-pop { animation: valuePopIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+/* Row slide-in for table rows (used in WorkerHome) */
+@keyframes rowSlideIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}

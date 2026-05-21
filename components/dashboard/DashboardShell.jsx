@@ -3,14 +3,18 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import useAuth from '../../hooks/useAuth'
+import { useTheme } from '../../context/ThemeContext'
 import DashboardSidebar from './DashboardSidebar'
 import DashboardHeader from './DashboardHeader'
 import { FullPageLoader } from '../ui/LoadingSpinner'
 
 const DashboardShell = ({ children }) => {
     const { user, loading } = useAuth()
+    const { theme } = useTheme()
     const router = useRouter()
     const [sidebarOpen, setSidebarOpen] = useState(false)
+
+    const isLight = theme === 'light'
 
     // Redirect to login if not authenticated
     useEffect(() => {
@@ -21,7 +25,13 @@ const DashboardShell = ({ children }) => {
     if (!user) return null
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: '#0A0F1E' }}>
+        <div style={{
+            display: 'flex',
+            minHeight: '100vh',
+            // ✅ Theme-aware dashboard background
+            background: isLight ? '#E0F2FE' : '#0A0F1E',
+            transition: 'background 0.3s ease',
+        }}>
             {/* Sidebar */}
             <DashboardSidebar
                 isOpen={sidebarOpen}
@@ -63,11 +73,11 @@ const DashboardShell = ({ children }) => {
             </div>
 
             <style>{`
-        @media (max-width: 768px) {
-          .dashboard-main   { margin-left: 0 !important; }
-          .sidebar-overlay  { display: block !important; }
-        }
-      `}</style>
+                @media (max-width: 768px) {
+                  .dashboard-main   { margin-left: 0 !important; }
+                  .sidebar-overlay  { display: block !important; }
+                }
+            `}</style>
         </div>
     )
 }

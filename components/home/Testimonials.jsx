@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import SectionHeading from '../ui/SectionHeading'
 import { useTheme } from '../../context/ThemeContext'
 
@@ -14,15 +15,13 @@ const testimonials = [
 ]
 
 const TestimonialCard = ({ t, isLight }) => {
-    const cardBg = isLight ? '#F0F9FF' : '#111827'
+    const cardBg     = isLight ? '#F0F9FF' : '#111827'
     const cardBorder = isLight ? '#38BDF8' : '#1B3358'
-    const textColor = isLight ? '#0C4A6E' : '#8892A4'
-    const nameColor = isLight ? '#0C1A2E' : '#E8EAF0'
+    const textColor  = isLight ? '#0C4A6E' : '#8892A4'
+    const nameColor  = isLight ? '#0C1A2E' : '#E8EAF0'
 
     return (
         <div style={{
-            minWidth: '320px',
-            maxWidth: '320px',
             background: cardBg,
             border: `1px solid ${cardBorder}`,
             borderRadius: '16px',
@@ -30,7 +29,8 @@ const TestimonialCard = ({ t, isLight }) => {
             display: 'flex',
             flexDirection: 'column',
             gap: '12px',
-            userSelect: 'none',
+            height: '100%',
+            boxSizing: 'border-box',
         }}>
             {/* Stars */}
             <div style={{ display: 'flex', gap: '3px' }}>
@@ -44,9 +44,7 @@ const TestimonialCard = ({ t, isLight }) => {
                 fontSize: '40px', lineHeight: 0.8,
                 color: isLight ? '#BAE6FD' : '#1B3358',
                 fontFamily: 'Georgia, serif',
-            }}>
-                "
-            </div>
+            }}>"</div>
 
             {/* Text */}
             <p style={{
@@ -79,9 +77,7 @@ const TestimonialCard = ({ t, isLight }) => {
                 </div>
                 <div>
                     <p style={{ fontSize: '14px', fontWeight: 600, color: nameColor }}>{t.name}</p>
-                    <span className={`badge-${t.role.toLowerCase()}`} style={{ fontSize: '11px' }}>
-                        {t.role}
-                    </span>
+                    <p style={{ fontSize: '12px', color: textColor, marginTop: '2px' }}>{t.role}</p>
                 </div>
             </div>
         </div>
@@ -91,9 +87,55 @@ const TestimonialCard = ({ t, isLight }) => {
 const Testimonials = () => {
     const { theme } = useTheme()
     const isLight = theme === 'light'
+    const swiperRef = useRef(null)
+    const initialized = useRef(false)
 
-    // Duplicate list for seamless infinite loop
-    const items = [...testimonials, ...testimonials]
+    useEffect(() => {
+        // Dynamically import Swiper to avoid SSR issues
+        const init = async () => {
+            if (initialized.current) return
+            try {
+                const { Swiper } = await import('swiper')
+                const { Autoplay, Pagination, Navigation } = await import('swiper/modules')
+
+                // Import Swiper styles dynamically
+                await import('swiper/css')
+                await import('swiper/css/pagination')
+                await import('swiper/css/navigation')
+
+                if (!swiperRef.current) return
+
+                new Swiper(swiperRef.current, {
+                    modules: [Autoplay, Pagination, Navigation],
+                    slidesPerView: 1,
+                    spaceBetween: 20,
+                    loop: true,
+                    autoplay: {
+                        delay: 4000,
+                        disableOnInteraction: false,
+                    },
+                    pagination: {
+                        el: '.testimonials-pagination',
+                        clickable: true,
+                    },
+                    navigation: {
+                        nextEl: '.testimonials-next',
+                        prevEl: '.testimonials-prev',
+                    },
+                    breakpoints: {
+                        640:  { slidesPerView: 2, spaceBetween: 16 },
+                        1024: { slidesPerView: 3, spaceBetween: 20 },
+                    },
+                })
+                initialized.current = true
+            } catch (err) {
+                console.warn('Swiper init failed, falling back to marquee', err)
+            }
+        }
+        init()
+    }, [])
+
+    const cyan = isLight ? '#0284C7' : '#00D4FF'
 
     return (
         <section id="testimonials" className="section" style={{ background: 'transparent' }}>
@@ -105,51 +147,62 @@ const Testimonials = () => {
                 />
             </div>
 
-            {/* Full-width marquee — outside container intentionally */}
-            <div style={{ position: 'relative', overflow: 'hidden', padding: '8px 0 16px' }}>
+            {/* Swiper container */}
+            <div style={{ padding: '8px 24px 40px', maxWidth: '1200px', margin: '0 auto' }}>
+                <div ref={swiperRef} className="swiper testimonials-swiper">
+                    <div className="swiper-wrapper">
+                        {testimonials.map((t, i) => (
+                            <div key={i} className="swiper-slide" style={{ height: 'auto' }}>
+                                <TestimonialCard t={t} isLight={isLight} />
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
-                {/* Left fade */}
+                {/* Controls row */}
                 <div style={{
-                    position: 'absolute', top: 0, left: 0, bottom: 0, width: '80px', zIndex: 2,
-                    background: isLight
-                        ? 'linear-gradient(to right, #E0F2FE, transparent)'
-                        : 'linear-gradient(to right, #0A0F1E, transparent)',
-                    pointerEvents: 'none',
-                }} />
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    gap: '16px', marginTop: '28px',
+                }}>
+                    <button className="testimonials-prev" style={{
+                        background: 'transparent',
+                        border: `1px solid ${isLight ? '#38BDF8' : '#1B3358'}`,
+                        borderRadius: '50%',
+                        width: '38px', height: '38px',
+                        cursor: 'pointer', color: isLight ? '#0C4A6E' : '#8892A4',
+                        fontSize: '18px',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        transition: 'all 0.2s',
+                    }} aria-label="Previous">‹</button>
 
-                {/* Right fade */}
-                <div style={{
-                    position: 'absolute', top: 0, right: 0, bottom: 0, width: '80px', zIndex: 2,
-                    background: isLight
-                        ? 'linear-gradient(to left, #E0F2FE, transparent)'
-                        : 'linear-gradient(to left, #0A0F1E, transparent)',
-                    pointerEvents: 'none',
-                }} />
+                    <div className="testimonials-pagination" style={{ position: 'static', display: 'flex', gap: '6px' }} />
 
-                {/* Track */}
-                <div
-                    className="marquee-track"
-                    style={{
-                        display: 'flex',
-                        gap: '16px',
-                        width: 'max-content',
-                        animation: 'marqueeScroll 40s linear infinite',
-                    }}
-                    onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'}
-                    onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}
-                >
-                    {items.map((t, i) => (
-                        <TestimonialCard key={i} t={t} isLight={isLight} />
-                    ))}
+                    <button className="testimonials-next" style={{
+                        background: 'transparent',
+                        border: `1px solid ${isLight ? '#38BDF8' : '#1B3358'}`,
+                        borderRadius: '50%',
+                        width: '38px', height: '38px',
+                        cursor: 'pointer', color: isLight ? '#0C4A6E' : '#8892A4',
+                        fontSize: '18px',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        transition: 'all 0.2s',
+                    }} aria-label="Next">›</button>
                 </div>
             </div>
 
             <style>{`
-        @keyframes marqueeScroll {
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
-        }
-      `}</style>
+                .testimonials-swiper { overflow: hidden; }
+                .testimonials-swiper .swiper-slide { height: auto; }
+                .testimonials-pagination .swiper-pagination-bullet {
+                    width: 8px; height: 8px;
+                    background: ${isLight ? '#BAE6FD' : '#1B3358'};
+                    opacity: 1; border-radius: 4px;
+                    transition: all 0.3s; cursor: pointer;
+                }
+                .testimonials-pagination .swiper-pagination-bullet-active {
+                    width: 24px; background: ${cyan};
+                }
+            `}</style>
         </section>
     )
 }
